@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>배민사장님앱 주문접수 미리 체험하기</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#F1F4F7;font-family:'Noto Sans KR',sans-serif;color:#111;word-break:keep-all;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+.wrap{display:flex;align-items:center;justify-content:center;gap:40px;padding:20px 16px;min-height:100vh}
+.side{max-width:340px;width:100%}
+.wrap.pre .side{display:none}
+@media(max-width:599px){.wrap{flex-direction:column-reverse;gap:14px;justify-content:flex-start;padding:14px 12px}.side{max-width:100%}}
+.coach{background:#fff;border-radius:18px;padding:22px 22px 20px;box-shadow:0 6px 24px rgba(20,40,60,.08)}
+.lab{display:inline-block;background:#DFF5F4;color:#0E9C96;font-weight:800;font-size:13px;padding:4px 10px;border-radius:20px;margin-bottom:12px;letter-spacing:.3px}
+.body{font-weight:700;font-size:clamp(15px,1.8vw,18px);line-height:1.55}
+.body b{color:#12B5AE}
+.note{margin-top:10px;font-size:13.5px;color:#5B6670;line-height:1.5}
+.qb{display:flex;gap:8px;margin-top:16px}
+.qb button{flex:1;height:46px;border-radius:10px;font-weight:700;font-size:15px;border:1.5px solid #D5DBE0;background:#fff}
+.qb button.y{background:#12B5AE;border-color:#12B5AE;color:#fff}
+.qb button:hover{filter:brightness(.97)}
+.homeBtn{margin-top:16px;width:100%;height:46px;border-radius:10px;background:#12B5AE;color:#fff;font-weight:700;font-size:15px}
+.again{display:block;margin:14px auto 0;font-size:13.5px;color:#7A8590;text-decoration:underline;text-underline-offset:3px}
+/* device */
+.devBox{position:relative;flex:none}
+.device{position:absolute;left:0;top:0;width:376px;height:706px;background:#1B232B;border-radius:36px;padding:8px;transform-origin:0 0;box-shadow:0 18px 40px rgba(20,30,40,.18)}
+.screen{position:relative;width:360px;height:690px;border-radius:28px;overflow:hidden;background:#fff}
+.view{position:absolute;inset:0;display:flex;flex-direction:column;background:#fff;transition:transform .38s cubic-bezier(.3,.7,.2,1)}
+.view.in{transform:translateX(100%)}
+.view.out{transform:translateX(-30%)}
+.sc{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;scrollbar-width:none}
+.sc::-webkit-scrollbar{display:none}
+.ov{position:absolute;inset:0;pointer-events:none;z-index:50}
+.spot{position:absolute;border:2.5px solid #12B5AE;border-radius:12px;box-shadow:0 0 0 3000px rgba(0,0,0,.5);transition:all .25s}
+.spot.nd{box-shadow:0 0 0 4px rgba(18,181,174,.18)}
+.tip{position:absolute;background:#111;color:#fff;font-size:13.5px;font-weight:500;padding:9px 30px 9px 13px;border-radius:9px;white-space:nowrap;pointer-events:auto;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.tip b{color:#4FE0D9}
+.tip i{position:absolute;width:10px;height:10px;background:#111;transform:rotate(45deg)}
+.tip .x{position:absolute;right:6px;top:50%;transform:translateY(-50%);color:#aaa;font-size:15px;width:20px;height:20px;line-height:20px;text-align:center}
+.hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);background:#12B5AE;color:#fff;font-size:13px;font-weight:700;padding:8px 14px;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,.2);animation:bob 1.2s infinite}
+@keyframes bob{50%{transform:translate(-50%,-4px)}}
+.ring{position:relative}
+.ring::after{content:'';position:absolute;inset:-5px;border-radius:inherit;border:2.5px solid #12B5AE;animation:pulse 1.4s infinite;pointer-events:none}
+@keyframes pulse{0%{opacity:1;transform:scale(.96)}100%{opacity:0;transform:scale(1.12)}}
+.nudge{animation:nudge .5s}
+@keyframes nudge{20%{transform:translateX(-3px)}40%{transform:translateX(3px)}60%{transform:translateX(-2px)}80%{transform:translateX(2px)}}
+.hl{background:#DFF5F4 !important;border-radius:6px;box-shadow:0 0 0 4px #DFF5F4;transition:background .4s}
+/* cover */
+.cover{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0 28px;text-align:center;background:#fff}
+.cover h1{font-size:27px;font-weight:800;line-height:1.4;margin-bottom:36px}
+.cover p{font-size:15px;color:#666;margin-bottom:34px}
+.cover button{width:100%;height:60px;border-radius:12px;font-size:18px;font-weight:700;margin-bottom:12px}
+.cover .c1{background:#2B7BF2;color:#fff}
+.cover .c2{background:#fff;border:1.5px solid #2B7BF2;color:#2B7BF2}
+/* topbar */
+.tb{height:56px;flex:none;display:flex;align-items:center;justify-content:center;position:relative;font-size:17px;font-weight:700;background:#fff}
+.tb .bk{position:absolute;left:14px;top:14px;width:28px;height:28px}
+.tb.mint{color:#2AC1BC}
+/* dark header */
+.dh{height:74px;flex:none;background:#1D1D1F;display:flex;align-items:center;padding:0 16px;gap:10px;position:relative}
+.dh .tm{color:#fff;font-size:20px;font-weight:700;margin-right:auto}
+.dh .tm small{font-size:17px;margin-left:6px}
+.pill{height:42px;border-radius:21px;padding:0 16px;font-size:15px;font-weight:700;white-space:nowrap}
+.pill.w{background:#fff;color:#111}
+.pill.b{background:#2B7BF2;color:#fff}
+.pill.wb{background:#fff;color:#2B7BF2;font-weight:800}
+.pill.wk{background:#fff;color:#111;min-width:96px}
+.stv{height:44px;flex:none;background:#DCEBFE;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:13.5px;font-weight:500;position:relative}
+.stv::before{content:'';position:absolute;right:62px;top:-7px;border:7px solid transparent;border-top:0;border-bottom-color:#DCEBFE}
+.stv span{display:flex;align-items:center;gap:4px}
+.stv img{width:30px;height:27px}
+.qm{display:inline-flex;width:16px;height:16px;border:1.6px solid #222;border-radius:50%;font-size:10px;font-weight:800;align-items:center;justify-content:center}
+/* sections */
+.sec{padding:26px 16px 24px;border-bottom:12px solid #F3F4F6}
+.sec h3{font-size:18px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.sec h3.ul span{background:linear-gradient(transparent 62%,#BFD8FF 62%)}
+.rw{display:flex;font-size:15px;line-height:1.5;margin-bottom:10px}
+.rw .k{width:72px;color:#777;flex:none}
+.rw .v{flex:1}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid #CFE0FB;background:#F2F7FF;color:#2B7BF2;border-radius:4px;padding:3px 9px;font-size:14.5px}
+.firstbox{margin-top:8px;background:#F5F6F7;border-radius:6px;padding:14px;text-align:center;font-size:15px}
+.firstbox small{display:block;color:#888;font-size:12px;margin-top:4px}
+.tbl{width:100%;font-size:14.5px;border-collapse:collapse}
+.tbl th{color:#888;font-weight:400;text-align:left;padding:9px 0;border-top:1px solid #E5E5E5;border-bottom:1px solid #E5E5E5}
+.tbl td{padding:7px 0;vertical-align:top}
+.tbl .r{text-align:right}.tbl .c{text-align:center;width:44px}
+.tbl tr.sum td{border-top:1px solid #E5E5E5;padding-top:12px}
+.tbl tr.tot td{border-top:1px solid #E5E5E5;padding-top:12px;font-weight:800}
+.dc{display:inline-block;background:#EEF0FF;color:#5865F2;font-size:12px;padding:1px 5px;border-radius:3px;margin-right:4px}
+.sub{color:#999;font-size:13px}
+.share{font-size:12.5px;color:#2B7BF2;border:1px solid #2B7BF2;border-radius:4px;padding:3px 9px;font-weight:500}
+.obtn{width:100%;height:46px;border:1px solid #D9D9D9;border-radius:4px;font-size:14.5px;font-weight:700;background:#fff;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:6px}
+.obtn:disabled{color:#bbb}
+.small{font-size:12.5px;color:#777;margin-top:8px;line-height:1.5}
+.foot{background:#F3F4F6;padding:18px 16px 70px}
+.foot .fb{width:100%;height:54px;border:1px solid #D9D9D9;background:#fff;border-radius:4px;font-size:15px;font-weight:700;margin-bottom:10px}
+.foot .fb.bl{color:#2B7BF2}
+.foot p{font-size:12.5px;color:#666;line-height:1.6;padding-left:8px;text-indent:-8px}
+/* delivery state */
+.ds{padding:22px 16px 22px;border-bottom:12px solid #F3F4F6}
+.ds h4{font-size:17px;font-weight:800}
+.ds .info{margin-top:14px;background:#EEF4FE;border-radius:6px;padding:11px 12px;font-size:13.5px}
+.prog{margin:22px 0 6px;position:relative;height:4px;background:#E2E2E2;border-radius:2px}
+.prog i{position:absolute;top:-4px;width:12px;height:12px;border-radius:50%;background:#BDBDBD}
+.prog i.on{background:#2B7BF2}
+.prog .fill{position:absolute;left:0;top:0;height:4px;width:40%;background:#D6E6FD;border-radius:2px}
+.pl{display:flex;justify-content:space-between;font-size:14px;color:#888;margin-top:10px}
+.pl .on{color:#2B7BF2}
+.ptimes{display:flex;font-size:14px;color:#888;gap:70px;margin-top:20px}
+.remain{background:#EEF4FE;border-radius:6px;padding:8px 12px;text-align:center;font-size:12px;color:#555}
+.remain b{display:block;font-size:19px;color:#111}
+.remain b small{font-size:12px;font-weight:500}
+/* list */
+.dark{background:#1D1D1F;color:#fff}
+.ltb{height:56px;flex:none;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px;position:relative;background:#1D1D1F;color:#fff}
+.ltb svg{position:absolute;right:16px;top:16px}
+.tabs{height:52px;flex:none;display:flex;align-items:center;padding:0 16px;gap:28px;font-size:15px;border-bottom:1px solid #333;background:#1D1D1F;color:#ddd}
+.tabs .on{color:#fff;font-weight:700;border-bottom:2.5px solid #fff;padding:14px 0 11px}
+.tabs .rm{margin-left:auto;background:#333;color:#6FA8FF;border-radius:16px;padding:5px 12px;font-weight:700;font-size:14.5px}
+.oi{padding:20px 16px;position:relative;border-bottom:1px solid #2E2E30}
+.oi.gap{border-bottom:12px solid #2A2A2C}
+.oi .t{font-size:21px;font-weight:800}
+.oi .t.m{color:#2AC1BC}
+.oi .n{font-size:17px;font-weight:700;margin-top:2px}
+.oi .p{font-size:15.5px;margin-top:6px;color:#eee}
+.oi .a{font-size:15px;color:#aaa}
+.circ{position:absolute;right:16px;top:20px;width:68px;height:68px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:16px;line-height:1.15}
+.circ.acc{background:#2B7BF2;color:#fff;font-size:19px}
+.circ.rg{border:4px solid #2B7BF2}
+.circ.rg small{font-size:12px;font-weight:500}
+.oi .rb{margin-top:12px;height:42px;background:#2C2C2E;border-radius:3px;display:flex;align-items:center;justify-content:center;color:#5B9BFF;font-weight:700;font-size:15px}
+.oi .rb.g{color:#bbb;font-weight:500}
+.bnav{height:58px;flex:none;background:#F5F5F5;display:flex;align-items:center;justify-content:space-around;font-size:10px;color:#666;position:relative}
+.bnav div{display:flex;flex-direction:column;align-items:center;gap:3px;width:60px}
+.bnav .ic{width:20px;height:20px;border:2px solid #888;border-radius:6px}
+.bnav .ctr{width:56px;height:56px;border-radius:50%;background:#2B7BF2;margin-top:-22px;border:0}
+/* change screen */
+.chg{flex:1;display:flex;flex-direction:column;align-items:center;padding-top:110px}
+.chg .ttl{font-size:18px;font-weight:700}
+.chg img{width:80px;height:72px;margin-top:8px}
+.st{display:flex;align-items:center;gap:6px;font-size:16px;font-weight:700;margin-top:6px;height:28px;transition:color .2s}
+.st.s0{color:#2B7BF2}.st.s1{color:#FF8A00}.st.s2{color:#F2545B}
+.st svg{flex:none}
+.ctrl{display:flex;align-items:center;gap:10px;margin-top:22px;padding:4px}
+.cb{width:52px;height:52px;border-radius:50%;border:1px solid #D9D9D9;font-size:18px;font-weight:700;background:#fff;transition:transform .1s}
+.pm{width:56px;height:56px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:transform .1s}.pm:active{transform:scale(.88)}
+.cb:active{transform:scale(.92)}
+.val{width:100px;text-align:center;font-size:31px;font-weight:800;color:#111;transition:color .2s}
+.val.s0{color:#2B7BF2}.val.s1{color:#FF8A00}.val.s2{color:#F2545B}
+.cta{flex:none;padding:16px 16px 16px}
+.cta button{width:100%;height:60px;background:#2B7BF2;color:#fff;font-size:19px;font-weight:700;border-radius:3px}
+/* add screen */
+.add{background:#F3F4F6}
+.add .sc{padding:0 16px 30px}
+.add .hd{text-align:center;padding:30px 0 16px}
+.add .hd small{display:block;color:#2AC1BC;font-size:15px;margin-bottom:4px}
+.add .hd b{font-size:17px}
+.ac{width:100%;height:96px;background:#fff;border:1px solid #E5E5E5;border-radius:4px;margin-bottom:8px;font-size:31px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:5px;transition:transform .1s}
+.ac small{font-size:17px;font-weight:500}
+.ac:active{transform:scale(.97)}
+.etc{display:flex;align-items:center;justify-content:center;gap:4px;margin:14px auto 0;color:#777;font-size:15px;padding:6px 10px}
+.etc svg{transition:transform .25s}
+.etc.op svg{transform:rotate(180deg)}
+.more{overflow:hidden;max-height:0;transition:max-height .35s}
+.more.op{max-height:220px;margin-top:10px}
+.topbtn{position:absolute;right:14px;bottom:14px;width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;z-index:5}
+.lock{pointer-events:none}
+</style>
+</head>
+<body>
+<div class="wrap pre" id="wrap">
+  <div class="devBox" id="devBox"><div class="device" id="device"><div class="screen" id="screen"><div class="ov" id="ov"></div></div></div></div>
+  <div class="side">
+    <div class="coach" id="coach"></div>
+    <button class="again" onclick="start()">처음부터 다시 보기</button>
+  </div>
+</div>
+<script>
+const SCOOTER='data:image/png;base64,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';
+/* ===== 타이밍 상수(ms) ===== */
+const T_SLIDE=380, T_AFTER_SCROLL=750, T_NUDGE=3000;
+const BASE=15;   // 제안 준비시간
+const STEP_BTN=[-3,-2,2,3];
+
+const S={mode:null,step:'cover',prep:BASE,add:0,touched:false};
+let SCALE=1,gT=null,fT=null,nT=null;
+const $=s=>document.querySelector(s);
+const nb=t=>t.split('<br>').map(l=>l.replace(/ ([^ <>]+)$/,'&nbsp;$1')).join('<br>');
+const isD=()=>S.mode==='d';
+const hm=m=>{m=(m+1440)%1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')};
+const ARROW='<svg class="bk" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M20 12H4M10 5l-7 7 7 7"/></svg>';
+
+/* ===== 공통 섹션 ===== */
+function reqSec(deliv){return `<div class="sec"><h3 class="ul"><span>요청사항</span></h3>
+<div class="rw"><div class="k">가게</div><div class="v">맵지 않게 부탁드려요.</div></div>
+${deliv?'<div class="rw"><div class="k">배달</div><div class="v">조심히 와주세요:)</div></div>':''}
+<div class="rw"><div class="k">친환경</div><div class="v chips"><span class="chip">수저포크 O</span><span class="chip">김치, 단무지 O</span><span class="chip">다회용기 사용 O</span></div></div>
+${deliv?'<div class="firstbox">우리가게 첫 주문한 고객입니다<small>최근 6개월 이내 주문 기준</small></div>':''}</div>`}
+function orderSec(share){return `<div class="sec"><h3><span>주문정보</span>${share?'<span class="share">+ 공유</span>':''}</h3>
+<table class="tbl"><tr><th>메뉴</th><th class="c">수량</th><th class="r">금액</th></tr>
+<tr><td style="padding-top:12px">포테이토 피자 M</td><td class="c" style="padding-top:12px">1</td><td class="r" style="padding-top:12px">18,000원</td></tr>
+<tr><td>치킨 너겟 (1인세트)</td><td class="c">1</td><td class="r">18,000원</td></tr>
+<tr><td><span class="dc">할인</span>슈퍼 디럭스 피자 L</td><td class="c">1</td><td class="r">18,000원</td></tr>
+<tr><td class="sub">ㄴ <span class="dc">할인</span>갈릭디핑소스</td><td></td><td class="r sub">1,000원</td></tr>
+<tr><td>제로콜라L</td><td class="c">1</td><td class="r">5,000원</td></tr>
+<tr class="sum"><td>주문금액</td><td class="c">4</td><td class="r">59,000원</td></tr>
+<tr><td>할인금액</td><td></td><td class="r">-4,000원</td></tr>
+<tr class="tot"><td>총 결제금액</td><td></td><td class="r">55,000원</td></tr></table></div>`}
+function storeSec(){return `<div class="sec"><h3>가게정보</h3><div class="rw"><div class="k">가게명</div><div class="v">배민식당 방이점 (123456)</div></div><div class="rw"><div class="k">주문번호</div><div class="v">TDFGSD3947</div></div></div>`}
+function footSec(lbl,deliv){return `<div class="foot"><button class="fb bl">배달의민족 고객센터 전화하기</button><button class="fb">${lbl}</button>
+<p>· 안심번호는 접수 후 최대 ${deliv?3:2}시간 유효합니다.</p><p>· 조리요청을 받기 전까지 취소가 가능하며, 조리요청 이후 주문취소는 고객센터를 이용해주세요.</p><p>· 고객정보를 배달목적 외 사용,보관,공개 시 법적처벌 받을 수 있습니다.</p></div>`}
+function title(){return isD()?'한집배달 A1B4':'픽업 123'}
+function tb(t){return `<div class="tb ${isD()?'mint':''}">${ARROW}${t}</div>`}
+const UP='<div class="topbtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.4"><path d="M12 20V5M5 11l7-7 7 7"/></svg></div>';
+
+/* ===== 화면 ===== */
+const V={
+cover:()=>`<div class="cover"><h1>체험하실 주문 유형을<br>선택해주세요</h1>
+<button class="c1" onclick="pick('d')">배민배달</button><button class="c2" onclick="pick('p')">픽업</button></div>`,
+list:()=>`<div class="ltb">주문접수<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M6 17V11a6 6 0 0112 0v6l2 2H4zM10 21h4"/></svg></div>
+<div class="tabs"><span class="on">신규·처리중 5</span><span>완료 99+</span><span class="rm">준비모드</span></div>
+<div class="sc dark">
+<div class="oi gap"><div class="t m">한집배달 A1B4</div><div class="n">포테이토 피자 M 외 3건</div><div class="p">55,000원</div><div class="a">배민동</div><button class="circ acc" id="accD" onclick="accList('d')">접수</button></div>
+<div class="oi"><div class="t">픽업 123</div><div class="n">포테이토 피자 M 외 3건</div><div class="p">55,000원</div><div class="a">배민동</div><button class="circ acc" id="accP" onclick="accList('p')">접수</button></div>
+<div class="oi"><div class="t m">한집배달 A1B4</div><div class="n">불고기 피자 M 외 3건</div><div class="p">35,000원</div><div class="a">배민동</div><div class="circ rg">20분<small>조리중</small></div></div>
+<div class="oi"><div class="t m">한집배달 A1B4</div><div class="n">포테이토 피자 M 외 3건</div><div class="p">55,000원</div><div class="a">배민동</div><div class="circ rg">10분<small>조리중</small></div><div class="rb">준비완료</div></div>
+<div class="oi"><div class="t">한집배달 A1B4</div><div class="n">포테이토 피자 M 외 3건</div><div class="p">55,000원</div><div class="a">배민동</div><div class="circ rg" style="font-size:15px">배달중</div><div class="rb g">준비완료된 주문입니다.</div></div>
+</div>
+<div class="bnav"><div><span class="ic"></span>셀프서비스</div><div><span class="ic"></span>우리가게NOW</div><button class="ctr"></button><div><span class="ic"></span>광장</div><div><span class="ic"></span>내정보</div></div>`,
+detail:()=>`${tb(title())}
+<div class="dh"><div class="tm">23:40</div><div id="hbtns" style="display:flex;gap:8px"><button class="pill w" id="bChg" onclick="goChange()">준비시간 변경</button><button class="pill b" id="bAcc" onclick="acc15()">${BASE}분으로 접수</button></div></div>
+${isD()?`<div class="stv"><span>제안 시간 적용중 <span class="qm">?</span></span><span><img src="${SCOOTER}" alt="">최적의 시간 내 배달가능!</span></div>`:''}
+<div class="sc">${reqSec(isD())}${orderSec(!isD())}
+${!isD()?'<div class="sec"><h3>주문자정보</h3><div class="rw"><div class="k">연락처</div><div class="v">050-0000-0000 <span style="color:#777">최대 2시간 유효</span></div></div></div>':''}
+<div class="sec"><h3>주문이력</h3><div class="rw"><div class="k">주문일시</div><div class="v">5. 26 (수) 20:00</div></div></div>
+${storeSec()}${footSec('주문 거부하기',isD())}</div>`,
+change:()=>`<div class="tb">${ARROW}준비시간 변경</div>
+<div class="chg"><div class="ttl">${title()}</div>${isD()?`<img src="${SCOOTER}" alt="">`:'<div style="height:10px"></div>'}
+<div class="st" id="st"></div>
+<div class="ctrl" id="ctrl">
+${isD()?`<button class="cb" onclick="adj(-3)">-3</button><button class="cb" onclick="adj(-2)">-2</button>
+<div class="val" id="val">${S.prep}분</div>
+<button class="cb" onclick="adj(2)">+2</button><button class="cb" onclick="adj(3)">+3</button>`
+:`<button class="pm" onclick="adj(-5)"><svg width="30" height="30" viewBox="0 0 30 30"><path d="M3 15h24" stroke="#111" stroke-width="2.6"/></svg></button>
+<div class="val" id="val" style="width:150px">${S.prep}분</div>
+<button class="pm" onclick="adj(5)"><svg width="30" height="30" viewBox="0 0 30 30"><path d="M3 15h24M15 3v24" stroke="#111" stroke-width="2.6"/></svg></button>`}</div></div>
+<div class="cta"><button id="ctaBtn" onclick="accChange()">접수</button></div>`,
+proc:()=>`${tb('한집배달 A1B4')}<div class="dh"><div class="tm">23:40</div></div>
+<div class="sc"><div class="ds"><h4>라이더를 찾고 있어요</h4><div class="info">ⓘ 가까운 라이더를 찾고 있어요.</div>
+<div class="prog"><i style="left:0"></i><i style="left:calc(50% - 6px)"></i><i style="right:0"></i></div>
+<div class="pl"><span>배차완료</span><span>픽업완료</span><span>배달완료</span></div>
+<button class="obtn" style="margin-top:16px">↻ 배달현황 업데이트</button></div>
+${reqSec(true)}${orderSec(false)}
+<div class="sec"><h3>배달정보</h3><div class="rw"><div class="k">배달주소</div><div class="v">배민동</div></div><div class="rw"><div class="k">배달방법</div><div class="v">배민라이더스</div></div><button class="obtn">☏ 안심콜 전화하기</button><div class="small">주문완료 후 3시간까지 사용할 수 있어요</div></div>
+<div class="sec" id="hist"><h3>주문이력</h3><div class="rw"><div class="k">주문일시</div><div class="v">5. 26 (수) 20:00</div></div><div class="rw"><div class="k">접수일시</div><div class="v">5. 26 (수) 20:10</div></div>
+<div class="rw"><div class="k">준비시간</div><div class="v"><span id="prepV">${S.prep+S.add}분</span></div></div>
+<button class="obtn" id="addBtn" onclick="goAdd()" ${S.add?'disabled':''}>＋ 준비시간 추가</button><div class="small">조리시간 추가는 배차 전까지 주문당 1회 가능하며, 고객안내시간에 반영됩니다.</div></div>
+${storeSec()}${footSec('주문 취소하기',true)}</div>`,
+pre:()=>`${tb('한집배달 A1B4')}<div class="dh"><div class="tm">23:40</div><button class="pill wb">준비완료</button></div>
+<div class="sc"><div class="ds"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><h4>라이더가 <span style="color:#2B7BF2">${S.prep+S.add+2}분</span> 후 도착해요</h4><div style="font-size:15px;margin-top:2px">6km 남음</div></div>
+<div class="remain" id="remain">남은 준비시간 ⓘ<b>${S.prep+S.add}<small>분</small></b></div></div>
+<div class="ptimes"><span>${hm(23*60+40-(S.prep+S.add+2))}</span><span>23:40 예정</span></div>
+<div class="prog" style="margin-top:8px"><div class="fill"></div><i class="on" style="left:28px"></i><i style="left:calc(50% - 6px)"></i><i style="right:0"></i></div>
+<div class="pl"><span class="on">배차완료</span><span>픽업완료</span><span>배달완료</span></div>
+<button class="obtn" style="margin-top:16px">↻ 배달현황 업데이트</button></div>
+${reqSec(true)}${orderSec(false)}${storeSec()}${footSec('주문 취소하기',true)}</div>`,
+add:()=>`<div class="tb" style="background:#F3F4F6">${ARROW}</div>
+<div class="sc"><div class="hd"><small>한집배달 A1B4</small><b>얼마나 더 걸릴지 선택해주세요</b></div>
+<div id="addList">${[5,10,15,20].map(m=>`<button class="ac" onclick="pickAdd(${m})">+${m}<small>분</small></button>`).join('')}</div>
+<button class="etc" id="etc" onclick="toggleEtc()">기타 시간 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2.4"><path d="M5 9l7 7 7-7"/></svg></button>
+<div class="more" id="more">${[25,30].map(m=>`<button class="ac" onclick="pickAdd(${m})">+${m}<small>분</small></button>`).join('')}</div></div>`,
+pdone:()=>`<div class="tb">${ARROW}픽업 123</div><div class="dh"><div class="tm">23:40<small>결제완료</small></div><button class="pill wk" id="readyBtn">준비완료</button></div>
+<div class="sc">${reqSec(false)}${orderSec(true)}
+<div class="sec"><h3>주문자정보</h3><div class="rw"><div class="k">연락처</div><div class="v">최대 2시간 유효</div></div><div class="rw"><div class="k">접수번호</div><div class="v">ABCDEFGH1234</div></div></div>
+<div class="sec" id="hist"><h3>주문이력</h3><div class="rw"><div class="k">주문일시</div><div class="v">5. 26 (수) 20:00</div></div><div class="rw"><div class="k">접수일시</div><div class="v">5. 26 (수) 20:10</div></div><div class="rw"><div class="k">조리시간</div><div class="v"><span id="prepV">${S.prep}분</span></div></div></div>
+${storeSec()}${footSec('주문 취소하기',false)}</div>`
+};
+V.add.cls='add';
+
+function show(name,anim=true){
+  const scr=$('#screen'),old=scr.querySelector('.view');
+  const v=document.createElement('div');v.className='view '+(V[name].cls||'');v.dataset.n=name;v.innerHTML=V[name]();
+  if(anim&&old){v.classList.add('in');}
+  scr.insertBefore(v,$('#ov'));
+  const sc=v.querySelector('.sc');if(sc)sc.addEventListener('scroll',place,{passive:true});
+  if(anim&&old){v.offsetWidth;v.classList.remove('in');old.classList.add('out');setTimeout(()=>old.remove(),T_SLIDE);}
+  else if(old)old.remove();
+  return v;
+}
+const cur=()=>$('#screen').querySelectorAll('.view');
+const curV=()=>{const a=cur();return a[a.length-1]};
+const curSc=()=>curV().querySelector('.sc');
+
+/* ===== 안내 ===== */
+function coach(lab,body,extra=''){ $('#coach').innerHTML=`<span class="lab">${lab}</span><div class="body">${nb(body)}</div>${extra}`; }
+let G=null; // 현재 안내 정의
+function guide(g){
+  clearTimeout(gT);clearInterval(nT);
+  document.querySelectorAll('.ring').forEach(e=>e.classList.remove('ring'));
+  G=g||null; $('#ov').innerHTML='';
+  if(!G)return;
+  (G.ring||[]).forEach(s=>{const e=curV().querySelector(s);e&&e.classList.add('ring')});
+  if(G.ring&&G.ring.length)nT=setInterval(()=>G.ring.forEach(s=>{const e=curV().querySelector(s);if(e){e.classList.remove('nudge');e.offsetWidth;e.classList.add('nudge')}}),T_NUDGE);
+  gT=setTimeout(place,T_SLIDE+20);
+}
+function place(){
+  const ov=$('#ov');ov.innerHTML='';if(!G||!G.t)return;
+  const el=curV().querySelector(G.t);if(!el)return;
+  const sr=$('#screen').getBoundingClientRect(),r=el.getBoundingClientRect();
+  const p=G.pad??6;
+  let x=(r.left-sr.left)/SCALE-p,y=(r.top-sr.top)/SCALE-p,w=r.width/SCALE+p*2,h=r.height/SCALE+p*2;
+  const sc=curSc();
+  if(sc&&sc.contains(el)){const s=sc.getBoundingClientRect(),top=(s.top-sr.top)/SCALE,bot=(s.bottom-sr.top)/SCALE;
+    if(y+h<top+10||y>bot-10){ov.innerHTML=`<div class="hint">${y>bot-10?'↓ 아래로':'↑ 위로'} 스크롤해 보세요</div>`;return;}}
+  ov.insertAdjacentHTML('beforeend',`<div class="spot ${G.noDim?'nd':''}" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${G.rad||12}px"></div>`);
+  if(G.tip&&!G.tipClosed){
+    const tp=document.createElement('div');tp.className='tip';tp.innerHTML=G.tip+'<i></i><button class="x">×</button>';ov.appendChild(tp);
+    tp.querySelector('.x').onclick=()=>{G.tipClosed=1;tp.remove()};
+    const tw=tp.offsetWidth,th=tp.offsetHeight;
+    let up=G.up===1||(G.up!==2&&y+h+th+14>690);
+    let tx=Math.min(Math.max(x+w/2-tw/2,8),360-tw-8),ty=up?y-th-10:y+h+10;
+    tp.style.left=tx+'px';tp.style.top=ty+'px';
+    const ar=tp.querySelector('i'),ax=Math.min(Math.max(x+w/2-tx-5,12),tw-22);
+    ar.style.left=ax+'px';ar.style[up?'bottom':'top']='-4px';
+  }
+}
+
+/* ===== 흐름 ===== */
+function start(){
+  clearTimeout(gT);clearTimeout(fT);clearInterval(nT);
+  Object.assign(S,{mode:null,step:'cover',prep:BASE,add:0,touched:false,n:1});
+  $('#wrap').classList.add('pre');guide(null);show('cover',false);fitDevice();log();
+}
+function log(){console.log('step',S.step)}
+function pick(m){S.mode=m;S.step='list';$('#wrap').classList.remove('pre');show('list');fitDevice();
+  coach('STEP 1',isD()?'새로 들어온 <b>한집배달</b> 주문의<br><b>접수</b> 버튼을 눌러주세요':'새로 들어온 <b>픽업</b> 주문의<br><b>접수</b> 버튼을 눌러주세요');
+  guide({t:isD()?'#accD':'#accP',tip:'<b>접수</b> 버튼을 눌러보세요',ring:[isD()?'#accD':'#accP'],rad:40});log();}
+function nx(){return 'STEP '+(++S.n)}
+function accList(m){ if(S.step!=='list'||m!==S.mode)return; S.step='detail';show('detail');
+  coach(nx(),'현재 주문 상황에 맞춰 계산한 준비시간으로<br><b>15분</b>을 제안드려요.',
+   `<div class="note" style="font-size:15px;color:#333;font-weight:500"><b style="color:#12B5AE;font-weight:700">15분으로 접수</b> 버튼을 눌러 주문을 바로 접수할&nbsp;수&nbsp;있어요</div><div class="note" style="font-size:15px;color:#333;font-weight:500">만약 준비시간이 더 필요하시다면<br><b style="color:#12B5AE;font-weight:700">준비시간 변경</b> 버튼을 클릭해주세요</div><div class="note" style="font-size:12.5px;color:#8A949E">※ 위 제안 시간은 예시이며, 주문별로 특성을 고려한 맞춤형 준비시간을 제안드려요</div>`);
+  guide({t:'#hbtns',ring:['#bChg','#bAcc'],rad:26});log();}
+function askMore(){S.step='ask';S.add=0;show('proc');guide(null);
+  coach(nx(),'혹시 준비시간이 더 필요하신가요?',`<div class="qb"><button onclick="ans(0)">아니오</button><button class="y" onclick="ans(1)">네</button></div>`);}
+function acc15(){ if(S.step!=='detail')return;
+  if(isD())askMore();
+  else{S.step='done';show('pdone');finishP();}
+  log();}
+function ans(y){ if(S.step!=='ask')return;
+  if(!y){S.step='done';show('pre');guide(null);
+    fT=setTimeout(()=>curV().querySelector('#remain').classList.add('hl'),T_SLIDE+100);
+    doneCoach(`<b>${S.prep}분</b>으로 주문 접수가 완료되었어요`);}
+  else{S.step='scroll';coach(nx(),'주문이력의 <b>준비시간 추가</b> 버튼을 눌러주세요');
+    const sc=curSc(),b=curV().querySelector('#addBtn');
+    sc.scrollTo({top:b.offsetTop-sc.clientHeight/2+30,behavior:'smooth'});
+    fT=setTimeout(()=>{S.step='addBtn';guide({t:'#addBtn',tip:'<b>준비시간 추가</b> 버튼을 눌러보세요',ring:['#addBtn'],rad:8});log();},T_AFTER_SCROLL);}
+  log();}
+function goAdd(){ if(S.step!=='addBtn')return; S.step='add';show('add');
+  coach(nx(),'라이더 배차 전까지<br>최대 <b>30분</b> 준비시간 추가 가능해요');
+  guide({t:'#addList',noDim:true,pad:6,tip:'추가할 시간을 선택해보세요',up:1});log();}
+function toggleEtc(){const e=$('#etc'),m=$('#more');e.classList.toggle('op');m.classList.toggle('op');
+  if(m.classList.contains('op')){G&&(G.t=null);$('#ov').innerHTML='';setTimeout(()=>curSc().scrollTo({top:999,behavior:'smooth'}),200);}}
+function pickAdd(m){ if(S.step!=='add')return; S.add=m;S.step='done';show('pre');guide(null);
+  fT=setTimeout(()=>curV().querySelector('#remain').classList.add('hl'),T_SLIDE+100);
+  doneCoach(`준비시간이 <b>${m}분</b> 추가되어<br>총 <b>${S.prep+m}분</b>으로 변경되었어요`);log();}
+function goChange(){ if(S.step!=='detail')return; S.step='change';S.touched=false;show('change');upd();
+  coach(nx(),'버튼을 눌러<br>필요한 준비시간으로 조정해주세요','<div class="note">2분 이상 추가하면 고객이 음식을 기다릴 수 있어요<br>5분 이상 추가하면 고객이 음식을 오래 기다릴 수 있어요</div>');
+  guide({t:'#ctrl',noDim:true,tip:'버튼을 눌러 시간을 조정해보세요',ring:[],rad:30,up:2});log();}
+/* 조정 범위: 배민배달 ±2/±3분, 5~30분 / 픽업 ±5분, 5~60분 */
+const RANGE={d:[5,30],p:[5,60]};
+function upd(){const d=S.prep-BASE,lv=d<0?-1:d>=5?2:d>=2?1:0,st=$('#st'),v=$('#val');
+  v.textContent=S.prep+'분';
+  if(lv<0){st.className='st';st.innerHTML='';v.className='val';return;}
+  const ic=lv?`<svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="currentColor"/><path d="M12 6v8M12 17.5v.5" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>`
+             :`<svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="currentColor"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const tx=['최적의 시간에 음식을 배달할 수 있어요','고객이 음식을 기다릴 수 있어요','고객이 음식을 오래 기다릴 수 있어요'][lv];
+  st.className='st s'+lv;st.innerHTML=ic+tx;v.className='val s'+lv;}
+function adj(n){ if(S.step!=='change'&&S.step!=='changeAcc')return;
+  const [mn,mx]=RANGE[S.mode];
+  S.prep=Math.max(mn,Math.min(mx,S.prep+n));upd();
+  if(!S.touched){S.touched=true;S.step='changeAcc';
+    coach(nx(),'준비시간 변경을 완료했다면<br><b>접수</b> 버튼을 눌러주세요');
+    guide({t:'.cta button',noDim:true,tip:'<b>접수</b> 버튼을 눌러주세요',ring:['#ctaBtn'],rad:6,up:1});log();}}
+function accChange(){ if(S.step!=='changeAcc')return;
+  if(isD())askMore();
+  else{S.step='done';show('pdone');finishP();}
+  log();}
+function finishP(){guide(null);
+  doneCoach(`준비시간 <b>${S.prep}분</b>으로<br>픽업 주문 접수가 완료되었어요`);}
+function doneCoach(t,extra=''){coach('완료',t,extra+'<button class="homeBtn" onclick="start()">처음으로 돌아가기</button>');}
+
+/* ===== 크기 ===== */
+function fitDevice(){
+  const mob=innerWidth<600,max=mob?.86:.74;
+  const side=mob?0:380, availW=innerWidth-(mob?24:side+80), availH=innerHeight-(mob?($('#wrap').classList.contains('pre')?28:$('.side').offsetHeight+44):40);
+  SCALE=Math.max(.4,Math.min(max,availW/376,Math.max(availH,420)/706));
+  if(mob)SCALE=Math.min(max,availW/376);
+  $('#device').style.transform=`scale(${SCALE})`;
+  $('#devBox').style.width=376*SCALE+'px';$('#devBox').style.height=706*SCALE+'px';
+  place();
+}
+addEventListener('resize',fitDevice);
+start();
+</script>
+</body>
+</html>
