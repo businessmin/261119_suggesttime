@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>배민사장님앱 주문접수 미리 체험하기</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#F1F4F7;font-family:'Noto Sans KR',sans-serif;color:#111;word-break:keep-all;-webkit-font-smoothing:antialiased}
@@ -198,7 +198,7 @@ const ARROW='<svg class="bk" viewBox="0 0 24 24" fill="none" stroke="#111" strok
 function reqSec(deliv){return `<div class="sec"><h3 class="ul"><span>요청사항</span></h3>
 <div class="rw"><div class="k">가게</div><div class="v">맵지 않게 부탁드려요.</div></div>
 ${deliv?'<div class="rw"><div class="k">배달</div><div class="v">조심히 와주세요:)</div></div>':''}
-<div class="rw"><div class="k">친환경</div><div class="v chips"><span class="chip">수저포크 O</span><span class="chip">김치, 단무지 O</span><span class="chip">다회용기 사용 O</span></div></div>
+<div class="rw"><div class="k">친환경</div><div class="v chips"><span class="chip">수저포크 O</span><span class="chip">기본반찬 O</span><span class="chip">다회용기 사용 O</span></div></div>
 ${deliv?'<div class="firstbox">우리가게 첫 주문한 고객입니다<small>최근 6개월 이내 주문 기준</small></div>':''}</div>`}
 function orderSec(share){return `<div class="sec"><h3><span>주문정보</span>${share?'<span class="share">+ 공유</span>':''}</h3>
 <table class="tbl"><tr><th>메뉴</th><th class="c">수량</th><th class="r">금액</th></tr>
@@ -341,8 +341,8 @@ function pick(m){S.mode=m;S.step='list';$('#wrap').classList.remove('pre');show(
   guide({t:isD()?'#accD':'#accP',tip:'<b>접수</b> 버튼을 눌러보세요',ring:[isD()?'#accD':'#accP'],rad:40});log();}
 function nx(){return 'STEP '+(++S.n)}
 function accList(m){ if(S.step!=='list'||m!==S.mode)return; S.step='detail';show('detail');
-  coach(nx(),'현재 주문 상황에 맞춰 계산한 준비시간으로<br><b>15분</b>을 제안드려요.',
-   `<div class="note" style="font-size:15px;color:#333;font-weight:500"><b style="color:#12B5AE;font-weight:700">15분으로 접수</b> 버튼을 눌러 주문을 바로 접수할&nbsp;수&nbsp;있어요</div><div class="note" style="font-size:15px;color:#333;font-weight:500">만약 필요하시다면 준비시간 변경 버튼을 눌러주세요</div><div class="note" style="font-size:12.5px;color:#8A949E">※ 위 제안 시간은 예시이며, 주문별로 특성을 고려한 맞춤형 준비시간을 제안드려요</div>`);
+  coach(nx(),'현재 상황에 맞춘 준비시간<br><b>15분</b>을 제안드려요.',
+   `<div class="note" style="font-size:15px;color:#333;font-weight:500"><b style="color:#12B5AE;font-weight:700">15분으로 접수</b> 버튼으로 바로 주문을 접수할&nbsp;수&nbsp;있어요</div><div class="note" style="font-size:15px;color:#333;font-weight:500">만약 시간 변경이 필요하다면 <span style="font-weight:600;color:#111">준비시간 변경</span> 버튼을 눌러주세요</div><div class="note" style="font-size:12.5px;color:#8A949E">※ 위 제안 시간은 예시이며, 주문별로 특성을 고려한 맞춤형 준비시간을 제안드려요</div>`);
   guide({t:'#hbtns',ring:['#bChg','#bAcc'],rad:26});log();}
 function askMore(){S.step='ask';S.add=0;show('proc');guide(null);
   coach(nx(),'혹시 준비시간이 더 필요하신가요?',`<div class="qb"><button onclick="ans(0)">아니오</button><button class="y" onclick="ans(1)">네</button></div>`);}
